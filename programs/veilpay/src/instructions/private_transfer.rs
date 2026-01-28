@@ -37,7 +37,7 @@ pub fn handler(
     );
 
     // Perform confidential Balance check
-    cspl_asser_ge(
+    cspl_assert_ge(
         &ctx.accounts.sender_balance.encrypted_balance,
         &encrypted_amount,
     )?;
@@ -58,9 +58,16 @@ pub fn handler(
     ctx.accounts.sender_balance.nonce += 1;    
     ctx.accounts.receiver_balance.nonce += 1;
 
+    // Emit event for Helius indexing (privacy-safe metadata only)
+    let clock = Clock::get()?;
     emit!(PrivateTransferEvent {
         commitment_hash,
         encrypted_tag,
+        slot: clock.slot,
+        timestamp: clock.unix_timestamp,
+        event_type: 0, // 0 = transfer
+        sender_bump: ctx.accounts.sender_balance.bump,
     });
+    
     Ok(())
 }

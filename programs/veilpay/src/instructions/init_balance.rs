@@ -24,5 +24,14 @@ pub fn handler(ctx: Context<InitBalance>) -> Result<()> {
     balance.encrypted_balance = [0u8; 64]; // Initialize with zero balance
     balance.nonce = 0;
     balance.bump = ctx.bumps.confidential_balance;
+    
+    // Emit event for Helius indexing
+    let clock = Clock::get()?;
+    emit!(crate::events::BalanceInitializedEvent {
+        owner_commitment: balance.owner_commitment,
+        slot: clock.slot,
+        timestamp: clock.unix_timestamp,
+    });
+    
     Ok(())
 }
