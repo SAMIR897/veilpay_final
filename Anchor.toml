@@ -8,6 +8,9 @@ skip-lint = false
 [programs.devnet]
 veilpay = "6pYu5mRNehST4KkwUzcEKt47Km9qNAvmCtdRtTjEanDG"
 
+[programs.localnet]
+veilpay = "6pYu5mRNehST4KkwUzcEKt47Km9qNAvmCtdRtTjEanDG"
+
 [registry]
 url = "https://api.apr.dev"
 

@@ -6,9 +6,7 @@ pub struct InitializeMint<'info> {
     #[account(
         init,
         payer = authority,
-        space = 8 + VeilPayMint::LEN,
-        seeds = [b"mint"],
-        bump
+        space = 8 + VeilPayMint::LEN
     )]
     pub veilpay_mint: Account<'info, VeilPayMint>,
     #[account(mut)]
@@ -20,6 +18,6 @@ pub fn handler(ctx: Context<InitializeMint>, cspl_config: [u8; 64]) -> Result<()
     let mint = &mut ctx.accounts.veilpay_mint;
     mint.authority = ctx.accounts.authority.key();
     mint.cspl_config = cspl_config;
-    mint.bump = ctx.bumps.veilpay_mint;
+    mint.bump = 0;
     Ok(())
 }

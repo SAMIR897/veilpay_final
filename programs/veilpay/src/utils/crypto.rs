@@ -12,7 +12,7 @@ pub fn cspl_assert_ge(
     let amount_c2 = &amount[ELGAMAL_C1_SIZE..ENCRYPTED_VALUE_SIZE];
 
     let balance_commitment = hashv(&[balance_c1, balance_c2]);
-    let amount_commitment = hashv(&[amount_c1, amount_c2]);
+    let _amount_commitment = hashv(&[amount_c1, amount_c2]);
 
     let balance_value = extract_encrypted_value(balance);
     let amount_value = extract_encrypted_value(amount);
