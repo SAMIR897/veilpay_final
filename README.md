@@ -62,11 +62,20 @@ ConfidentialBalance Account:
 - Owner verification through commitments
 - Privacy-safe event emission for indexing
 
-### Security
+### Privacy & Security
 - End-to-end encryption for sensitive data
 - Range proofs for balance validation
 - Zero-knowledge proofs for correctness
 - Access control via owner commitments
+
+## User Experience
+
+VeilPay isn't just about privacy; it's about usability and aesthetics.
+
+- **Immersive Interface**: A "Matrix Rain" animated background sets the stage for a cyberpunk-inspired privacy tool.
+- **Glassmorphism Design**: High-end, frosted glass UI elements ensure readability while maintaining a modern, sleek look.
+- **Visual Feedback**: Real-time loading states, success animations, and intuitive error handling.
+- **Readable Privacy**: Complex cryptographic data (hashes, encrypted balances) is formatted into human-readable Hex strings for clarity.
 
 ---
 
@@ -96,9 +105,14 @@ anchor test
 # Setup frontend
 cd ../frontend
 npm install
+
+# Configure Environment
+# Copy the example env file
 cp .env.example .env.local
-# Edit .env.local with your configuration
+
+# Run the UI
 npm run dev
+# Open http://localhost:5173 to see the Matrix Rain in action!
 ```
 
 ### Environment Variables
