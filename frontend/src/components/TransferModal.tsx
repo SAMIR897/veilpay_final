@@ -52,12 +52,21 @@ export const TransferModal: React.FC<TransferModalProps> = ({ isOpen, onClose, b
 
             const encryptedTag = generateEncryptedTag(recipientPubkey, senderSecret);
 
-            // Get current nonce (mock: fetch from account)
-            // ideally we fetch the account and get the real nonce
-            // For hackathon demo, we might need to assume 0 or fetch it
-            // @ts-ignore
-            const balanceAccount = await program.account.confidentialBalance.fetch(balancePda);
-            const currentNonce = balanceAccount.nonce.toNumber();
+            // 2b. Get current nonce & Check Sender Account
+            let currentNonce = 0;
+            let senderNeedsInit = false;
+
+            // Checks if sender account exists
+            const senderAccountInfo = await connection.getAccountInfo(balancePda);
+            if (senderAccountInfo) {
+                // @ts-ignore
+                const balanceAccount = await program.account.confidentialBalance.fetch(balancePda);
+                currentNonce = balanceAccount.nonce.toNumber();
+            } else {
+                console.log("New user detected, auto-initializing account...");
+                senderNeedsInit = true;
+                currentNonce = 0;
+            }
 
             const commitmentHash = generateCommitmentHash(
                 encryptedAmount,
@@ -73,6 +82,19 @@ export const TransferModal: React.FC<TransferModalProps> = ({ isOpen, onClose, b
 
             // 4. Build Transaction
             const tx = new anchor.web3.Transaction();
+
+            // Auto-Init Sender if needed
+            if (senderNeedsInit) {
+                const initSenderIx = await program.methods
+                    .initBalance()
+                    .accounts({
+                        confidentialBalance: balancePda,
+                        owner: wallet.publicKey,
+                        payer: wallet.publicKey,
+                    })
+                    .instruction();
+                tx.add(initSenderIx);
+            }
 
             // Check if receiver account exists
             // @ts-ignore
